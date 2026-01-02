@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { getQRCode } from "./utils/qrGenerator";
+import { getQRCode, isFinderPattern } from "./utils/qrGenerator";
 
 const App = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -7,21 +7,26 @@ const App = () => {
     const qrObject = getQRCode("https://github.com");
 
     const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
     const size = qrObject.modules.size;
 
-    ctx?.clearRect(0, 0, 400, 400);
+    ctx.clearRect(0, 0, 400, 400);
     const squareSize = 400 / size;
 
     for (let rowIndex = 0; rowIndex < size; rowIndex++) {
       for (let colIndex = 0; colIndex < size; colIndex++) {
-        const isDark = qrObject.modules.data[rowIndex * size + colIndex];
-        if (isDark)
-          ctx?.fillRect(
+        const isPainted = qrObject.modules.data[rowIndex * size + colIndex];
+        if (isPainted) {
+          ctx.fillStyle = isFinderPattern(rowIndex, colIndex, size)
+            ? "red"
+            : "black";
+          ctx.fillRect(
             colIndex * squareSize,
             rowIndex * squareSize,
             squareSize,
             squareSize
           );
+        }
       }
     }
   }, []);
