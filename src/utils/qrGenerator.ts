@@ -18,3 +18,23 @@ export const isFinderPattern = (
     return true;
   return false;
 };
+
+export const isLogoArea = (row: number, col: number, size: number): boolean => {
+  const logoRatio = 0.2;
+  const logoSize = size * logoRatio;
+  const padding = 1.5;
+  const start = (size - logoSize) / 2 - padding;
+  const end = size - start;
+  if (row >= start && row <= end && col >= start && col <= end) return true;
+
+  return false;
+};
+
+export const downloadCanvasAsPng = (canvas: HTMLCanvasElement) => {
+  const data = canvas.toDataURL("image/png");
+  const downloadElement = document.createElement("a");
+  downloadElement.href = data;
+  downloadElement.download = "qr-code.png";
+  downloadElement.click();
+  downloadElement.remove();
+};

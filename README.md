@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+# Custom QR Code Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, high-performance React application designed to generate fully customizable QR codes. Unlike standart generators, this project renders QR raw matrix data directly onto the **HTML5 Canvas API**, allowing for pixel-perfect manipulation, smart logo integration, and high-resolution exports.
 
-Currently, two official plugins are available:
+## Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Advanced Color Customization:**
 
-## React Compiler
+  - **Data Modules:** Change the color of the QR dots.
+  - **Finder Patterns (Eyes):** Customize the corner "eye" colors independently from the data.
+  - **Background:** Support for custom background colors with full-bleed rendering.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Smart Logo Integration:**
 
-## Expanding the ESLint configuration
+  - Upload brand logos to the center of the QR code.
+  - **Auto-Clear Algorithm:** The application mathematically calculates the logo's coordinate area and prevents drawing data modules behind it ("Quiet Zone"), ensuring the QR code remains scannable and aesthetically clean.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **High-Resolution Export:**
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+  - Implements a "Virtual Resolution" strategy.
+  - Renders at **2000x2000px** internally for crisp, high-quality PNG downloads, regardless of the screen display size.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Standard Compliance:**
+  - Utilizes **Error Correction Level H** (High) to maintain data integrity even with logo overlays (up to 30% damage recovery).
+    \*Includes proper margin/padding calculations for optimal reader recognition.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Core:** React 19, TypeScript
+- **Styling:** Tailwind CSS (v4)
+- **Build Tool:** Vite
+- **Graphics:** HTML5 Canvas API (2D Context)
+- **Logic:** `qrcode` (used solely for raw matrix calculation, rendering is custom-built).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## How It Works
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Matrix Generation:** The app generates a raw grid of 0s and 1s based on the input URL.
+2. **Canvas Rendering:** A custom rendering engine iterates through the matrix. It calculates coordinates dynamically based on a virtual 2000px canvas.
+3. **Collision Detection:** Before drawing a module, the engine checks if the coordinate intersects with the defined logo area or finder patterns to apply the correct styles.
+4. **Export:** The canvas data is converted to a Blob/DataURL for client-side downloading.
