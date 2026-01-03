@@ -99,7 +99,7 @@ const App = () => {
             className="w-full border p-2 rounded font-mono focus:ring-2"
             type="text"
             value={url}
-            placeholder="Write Someting..."
+            placeholder="Write Something..."
             onChange={(e) => setUrl(e.target.value)}
           />
           <div className="flex items-center gap-2">

@@ -22,7 +22,7 @@ A modern, high-performance React application designed to generate fully customiz
 
 - **Standard Compliance:**
   - Utilizes **Error Correction Level H** (High) to maintain data integrity even with logo overlays (up to 30% damage recovery).
-    \*Includes proper margin/padding calculations for optimal reader recognition.
+  * Includes proper margin/padding calculations for optimal reader recognition.
 
 ## Tech Stack
 
